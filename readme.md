@@ -3,7 +3,7 @@ This is the repository for my gh-pages hosted portfolio.
 
 
 My blog can be found here: 
-http://haestflod.blogspot.com/
+http://saaratrix.blogspot.com/
 
 School projects can be found here: 
 https://github.com/haestflod/school-projects
