@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A watery ripple reveal effect using pointer movement to reveal what's behind a black canvas.">
+    <title>WebGL watery ripple reveal effect</title>
+
+    <link href="style.css" rel="stylesheet" >
+</head>
+<body>
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="item-content">
+                <h3>WebGL watery ripple reveal effect</h3>
+                <p>
+                    When the pointer moves the pointer position is stored and then increases the area of influence over time revealing more of the image.
+                    After some time the area of influence shrinks until it's gone.
+                    <br>
+                    Used <a href="https://github.com/sirxemic/jquery.ripples">jquery.ripples</a> plugin to create the ripples.
+                    <br>
+                    A blur brush image was used to draw on a canvas to create a masking image to show the underlying image.
+                    <br>
+                    The project was formerly found at <a href="http://mcdbooks.com">mcdbooks.com</a> but they've updated their landing page since then.
+                </p>
+                <p class="back-index-button">
+                    <a href="index.html">Go back to start</a>
+                </p>
+                <div class="video-embed-wrapper">
+                    <!-- youtube embed e.t.c. here -->
+                    <iframe class="video-child" width="560" height="315" src="https://www.youtube.com/embed/DdW1tznkHYM?rel=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
