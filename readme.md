@@ -1,5 +1,5 @@
 This is the repository for my gh-pages hosted portfolio.
-**link to gh-pages**
+https://haestflod.github.io/portfolio/
 
 
 My blog can be found here: 
