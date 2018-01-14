@@ -5,7 +5,7 @@
 @color: silver;
 @bgColor: #222222;
 @fontSize: 1rem;
-
+// The maximum width!
 @contentWidth: 1080px;
 @contentPadding: 15px;
 
@@ -34,10 +34,10 @@ body {
 @arrowMargin: -9px;
 @galleryItemsPerRow: 3;
 @galleryMargin: 5px;
-//@galleryItemWidth: (@contentWidth - (@contentPadding * 2) - (@galleryMargin * @galleryItemsPerRow)) / @galleryItemsPerRow;
 @galleryItemWidth: (100/@galleryItemsPerRow);
 @galleryItemWidthCalculated: calc(~"@{galleryItemWidth}% - @{galleryMargin}");
 @loadingSize: 128px;
+// Since it's rotating and the loading gif is a square it's sqrt( 2 )
 @loadingFullSize: @loadingSize * 1.415; // Bit above sqrt ( 2 ) 1.41421356237...
 
 #index_items {
@@ -51,13 +51,11 @@ body {
     list-style: none;
   }
 
-
   padding-left: 0;
   font-size: 0;
 
   // Source for the rectangular calculations: https://stackoverflow.com/questions/5445491/height-equal-to-dynamic-width-css-fluid-layout
   .item {
-    //display: inline-block;
     display:inline-block;
     margin-right: @galleryMargin;
     margin-bottom: @galleryMargin;

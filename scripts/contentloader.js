@@ -215,9 +215,26 @@ class ContentLoader {
             return this.m_fetchedContents[a_url];
         }
         let promise = new Promise(res => {
-            setTimeout(() => {
-                res("Hello!");
-            }, 1000);
+            let xhr = new XMLHttpRequest();
+            xhr.onload = (event) => {
+                const htmlDocument = xhr.responseXML;
+                let itemContent = htmlDocument.querySelector(".item-content");
+                let backButtons = itemContent.querySelectorAll(".back-index-button");
+                // Remove the back buttons since they aren't very useful for the dynamic item viewing
+                for (let i = 0; i < backButtons.length; ++i) {
+                    let backButton = backButtons.item(i);
+                    backButton.parentElement.removeChild(backButton);
+                }
+                const htmlText = itemContent.parentElement.innerHTML;
+                res(htmlText);
+            };
+            xhr.onerror = (event) => {
+                console.log("error", event);
+            };
+            xhr.responseType = 'document';
+            xhr.open("GET", a_url, true);
+            xhr.setRequestHeader('Content-type', 'text/html');
+            xhr.send();
         });
         this.m_fetchedContents[a_url] = promise;
         return promise;
@@ -225,7 +242,7 @@ class ContentLoader {
 }
 ContentLoader.ItemsPerRow = 3;
 ContentLoader.MarginBottomPerItem = -1;
-ContentLoader.HeightTransitionLength = 1000;
+ContentLoader.HeightTransitionLength = 250;
 document.addEventListener("DOMContentLoaded", () => {
     let contentLoader = new ContentLoader("index_items", "detail_container");
 });

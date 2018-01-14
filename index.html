@@ -10,70 +10,64 @@
 </head>
 <body>
     <div class="content-wrapper">
-        <div class="content">
+        <main class="content">
             <p>
                 Portfolio for some of my own projects and some projects for clients.
                 <br>
                 Click on the title or the thumbnail for more detailed information.
+                <br>
             </p>
-            <ul class="list index-list">
-                <li>
-                    <h1>
-                        <a href="epicmegajam2017.html">Epic MegaJam 2017</a>
-                    </h1>
-                    <p>
-                        A game made for Epic MegaJam 2017
-                        <br>
-                        <a href="epicmegajam2017.html">
-                            <img src="files/epicmegajam2017/hugging.png" alt="thumbnail for E For Hugs">
+            <div id="index_items" class="list index-list">
+                <div class="item">
+                    <div class="img-wrapper">
+                        <a href="epicmegajam2017.html" class="project-link">
+                            <img src="files/epicmegajam2017/hugging.png" alt="thumbnail for E For Hugs" title="Epic MegaJam 2017">
                         </a>
-                    </p>
-                </li>
-                <li>
-                    <h1>
-                        <a href="water_ripple_effect.html">WebGL watery ripple reveal effect</a>
-                    </h1>
-                    <p>
-                        A watery ripple reveal effect using pointer movement to reveal what's behind a black canvas.
-                        <br>
-                        <a href="water_ripple_effect.html">
-                            <img src="files/mcdbooks/wateryeffect.png" alt="thumbnail for ripple effect">
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="img-wrapper">
+                        <a href="water_ripple_effect.html" class="project-link">
+                            <img src="files/mcdbooks/wateryeffect.png" alt="thumbnail for ripple effect" title="WebGL watery ripple reveal effect">
                         </a>
-                    </p>
-                </li>
-                <li>
-                    <h1>
-                        <a href="smooth_gradient.html">Smooth rainbow gradient</a>
-                    </h1>
-                    <p>
-                        A rainbow gradient for all section elements to match the scrollbar gradient to the right.
-                        <br>
-                        <a href="smooth_gradient.html">
-                            <img src="files/postersofpride/postersofpride.png" alt="postersofpride.com">
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="img-wrapper">
+                        <a href="smooth_gradient.html" class="project-link">
+                            <img src="files/postersofpride/postersofpride.png" alt="postersofpride.com" title="Smooth rainbow gradient">
                         </a>
-                    </p>
-                </li>
-                <li>
-                    <h1>
-                        <a href="chat_app.html">Websocket chat app</a>
-                    </h1>
-                    <p>
-                        A chat application using websockets between 2 users.
-                    </p>
-                    <a href="chat_app.html">
-                        <img src="files/reydyo/chatting.png" alt="reydyo.com chatting demonstration">
-                    </a>
-                </li>
-                <li>
-                    <h1>
-                        <a href="websites.html">Websites</a>
-                    </h1>
-                    <p>
-                        Some additional websites that I've helped build
-                    </p>
-                </li>
-            </ul>
-        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="img-wrapper">
+                        <a href="chat_app.html" class="project-link">
+                            <img src="files/reydyo/chatting.png" alt="reydyo.com chatting demonstration" title="Websocket chat app">
+                        </a>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="img-wrapper">
+                        <a href="websites.html" class="project-link">
+                            <img src="files/websites/casalaperla1.png" alt="casalaperla.com landing page" title="Other websites">
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="detail_container" class="detail-container" style="height:0px;">
+                <div class="arrow-container">
+                    <div class="arrow">▲</div>
+                    <hr>
+                </div>
+                <div class="loading">
+                    <img src="img/loading.gif">
+                </div>
+                <div class="detail-content"></div>
+            </div>
+        </main>
     </div>
+    <script src="scripts/contentloader.js" type="text/javascript"></script>
 </body>
 </html>
