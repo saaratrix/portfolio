@@ -1,44 +1,50 @@
 * {
   box-sizing: border-box;
 }
+body {
+  color: silver;
+  background-color: #222222;
+  overflow-y: scroll;
+}
 .content-wrapper {
   width: 100%;
   max-width: 1080px;
   margin: 0 auto;
   padding: 0px 15px;
 }
+.content {
+  position: relative;
+}
+#index_items .img-wrapper {
+  cursor: pointer;
+}
 .list {
-  list-style: none;
   padding-left: 0;
-}
-.index-list img {
-  max-width: 360px;
-  width: 100%;
-  height: auto;
-}
-.image-gallery {
   font-size: 0;
 }
-.image-gallery li {
+.list.ul {
+  list-style: none;
+}
+.list .item {
   display: inline-block;
   margin-right: 5px;
   margin-bottom: 5px;
   width: calc(33.333333333333336% - 5px);
   position: relative;
 }
-.image-gallery li::before {
+.list .item::before {
   content: "";
   display: block;
   margin-top: 100%;
 }
-.image-gallery li .img-wrapper {
+.list .item .img-wrapper {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
 }
-.image-gallery li img {
+.list .item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -56,4 +62,54 @@
   left: 0;
   width: 100%;
   height: 100%;
+}
+.dummy-detail {
+  width: 100%;
+  transition: height 0.2s ease;
+}
+.detail-container {
+  width: 100%;
+  overflow: hidden;
+  transition: height 0.2s ease;
+  font-size: 1rem;
+}
+.detail-container .detail-content {
+  padding: 15px 0;
+}
+.detail-container .arrow-container hr {
+  border: silver solid 2px;
+  margin: -9px 0 0 0;
+}
+.detail-container .arrow {
+  display: inline-block;
+  position: relative;
+  font-size: 2em;
+  transition: left 0.2s ease;
+  margin-top: -9px;
+}
+.detail-container .loading {
+  height: 181.12px;
+}
+.detail-container .loading img {
+  animation-name: spin;
+  animation-duration: 3000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  width: 128px;
+  height: 128px;
+  margin-top: 26.56px;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/*******
+  Utility classes
+****/
+.hide {
+  display: none !important;
 }

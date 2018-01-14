@@ -2,8 +2,23 @@
   box-sizing: border-box;
 }
 
+@color: silver;
+@bgColor: #222222;
+@fontSize: 1rem;
+
 @contentWidth: 1080px;
 @contentPadding: 15px;
+
+@transitionAnimation: 0.2s ease;
+.heightTransition() {
+  transition: height @transitionAnimation;
+}
+
+body {
+  color: @color;
+  background-color: @bgColor;
+  overflow-y:scroll;
+}
 
 .content-wrapper {
   width: 100%;
@@ -12,32 +27,38 @@
   padding: 0px @contentPadding ;
 }
 
-.list {
-  list-style: none;
-  padding-left: 0;
+.content {
+  position:relative;
 }
 
-.index-list {
-  img {
-    max-width: @contentWidth / 3;
-    width: 100%;
-    height: auto;
-  }
-}
-
-
+@arrowMargin: -9px;
 @galleryItemsPerRow: 3;
 @galleryMargin: 5px;
 //@galleryItemWidth: (@contentWidth - (@contentPadding * 2) - (@galleryMargin * @galleryItemsPerRow)) / @galleryItemsPerRow;
 @galleryItemWidth: (100/@galleryItemsPerRow);
 @galleryItemWidthCalculated: calc(~"@{galleryItemWidth}% - @{galleryMargin}");
+@loadingSize: 128px;
+@loadingFullSize: @loadingSize * 1.415; // Bit above sqrt ( 2 ) 1.41421356237...
 
-.image-gallery {
+#index_items {
+  .img-wrapper {
+    cursor: pointer;
+  }
+}
+
+.list {
+  &.ul {
+    list-style: none;
+  }
+
+
+  padding-left: 0;
   font-size: 0;
 
   // Source for the rectangular calculations: https://stackoverflow.com/questions/5445491/height-equal-to-dynamic-width-css-fluid-layout
-  li {
-    display: inline-block;
+  .item {
+    //display: inline-block;
+    display:inline-block;
     margin-right: @galleryMargin;
     margin-bottom: @galleryMargin;
     width: @galleryItemWidthCalculated;
@@ -65,7 +86,6 @@
   }
 }
 
-
 .item-content {
   .video-embed-wrapper {
     position: relative;
@@ -81,4 +101,67 @@
       height: 100%;
     }
   }
+}
+
+.dummy-detail {
+  width: 100%;
+  .heightTransition();
+}
+
+// Content popout css
+.detail-container {
+  width: 100%;
+  //margin-top: -@contentPadding;
+  overflow: hidden;
+  .heightTransition();
+  font-size: @fontSize;
+
+  .detail-content {
+    padding: @contentPadding 0;
+  }
+
+  .arrow-container {
+    //border-bottom: @color solid 1px;
+    hr {
+      border: @color solid 2px;
+      margin: @arrowMargin 0 0 0;
+    }
+  }
+  .arrow {
+    display: inline-block;
+    position: relative;
+    font-size: 2em;
+    transition: left @transitionAnimation;
+    margin-top: @arrowMargin;
+  }
+
+  .loading {
+
+    height: @loadingFullSize;
+    img {
+      animation-name: spin;
+      animation-duration: 3000ms;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+
+      width:128px;
+      height: 128px;
+      margin-top: (@loadingFullSize - @loadingSize) * 0.5;
+
+      @keyframes spin {
+        from {
+          transform: rotate(0deg); }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    }
+  }
+}
+
+/*******
+  Utility classes
+****/
+.hide {
+  display:none !important;
 }
