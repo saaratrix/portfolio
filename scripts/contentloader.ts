@@ -7,8 +7,10 @@ interface ContentItem {
 class ContentLoader
 {
     public static readonly ItemsPerRow: number = 3;
+    public static readonly HeightTransitionLength: number = 250;
+    // Set in constructor by getting computedStyle for the first content item
     public static MarginBottomPerItem: number = -1;
-    public static HeightTransitionLength: number = 250;
+
 
     private m_listRoot: HTMLDivElement = null;
     private m_items: ContentItem[] = [];
@@ -50,6 +52,10 @@ class ContentLoader
         });
     }
 
+    /**
+     * Init each .item element and create the contentItem
+     * @param {HTMLDivElement} a_itemElement
+     */
     private initItemElement(a_itemElement: HTMLDivElement) {
         const itemIndex: number = this.m_items.length;
         const rowIndex = ~~(itemIndex / ContentLoader.ItemsPerRow);
@@ -196,15 +202,29 @@ class ContentLoader
         }
     }
 
+    /**
+     * Show the loading gif and update the content height
+     */
     private showLoading() {
         this.m_detailLoadingElement.classList.remove("hide");
         this.setContentHeight();
     }
 
+    /**
+     * Get the first content item for a row number.
+     * Which is row * items per row!
+     * @param {number} a_row
+     * @return {ContentItem}
+     */
     private getFirstItemForRow(a_row: number) : ContentItem {
         return this.m_items[a_row * ContentLoader.ItemsPerRow] || null;
     }
 
+    /**
+     * When the .item element is clicked by a user
+     * @param {ContentItem} a_contentItem
+     * @return {Promise<void>}
+     */
     private async onItemClicked (a_contentItem: ContentItem) {
         const oldItem = this.m_selectedItem;
         const isDifferentItem: boolean = this.m_selectedItem !== a_contentItem;
@@ -224,6 +244,7 @@ class ContentLoader
                     this.addDummyElement();
                     // While the detailRoot is gone from the DOM set height to 0 to not trigger animation
                     this.m_detailRoot.style.height = "0";
+                    this.positionArrow();
                     // This adds the detailRoot back to the DOM
                     this.addDetailElement();
                 }
@@ -240,7 +261,7 @@ class ContentLoader
             }
 
             try {
-                const content = await this.fetchContent(url);
+                const content = await this.fetchContent(url, a_contentItem);
                 // Show the item
                 this.showContent(a_contentItem, content);
             } catch (err) {
@@ -253,7 +274,13 @@ class ContentLoader
         }
     }
 
-    private fetchContent(a_url: string): Promise<string> {
+    /**
+     * Fetch and parse the HTML from a url for a content item.
+     * @param {string} a_url
+     * @param {ContentItem} a_contentItem
+     * @return {Promise<string>}
+     */
+    private fetchContent(a_url: string, a_contentItem: ContentItem): Promise<string> {
         if (this.m_fetchedContents[a_url]) {
             return this.m_fetchedContents[a_url];
         }
@@ -275,8 +302,15 @@ class ContentLoader
                 const htmlText = itemContent.parentElement.innerHTML;
                 res(htmlText);
             };
+
             xhr.onerror = (event) => {
-                console.log("error", event);
+                const itemUrl = a_contentItem.url;
+
+                const errorHtml = "<p>Something went wrong loading the portfolio item. \
+                                        <br> \
+                                        Link to the portfolio item: <a href='" + itemUrl + "'>" + itemUrl + "</a> \
+                                    </p>";
+                res(errorHtml);
             };
 
             xhr.responseType = 'document';

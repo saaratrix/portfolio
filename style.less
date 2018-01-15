@@ -4,10 +4,14 @@
 
 @color: silver;
 @bgColor: #222222;
+@lighterBgColor: #333333;
 @fontSize: 1rem;
 // The maximum width!
 @contentWidth: 1080px;
 @contentPadding: 15px;
+
+@linkColor: #d06; // dog!
+@linkHover: #ca7; // cat!
 
 @transitionAnimation: 0.2s ease;
 .heightTransition() {
@@ -17,7 +21,23 @@
 body {
   color: @color;
   background-color: @bgColor;
-  overflow-y:scroll;
+  // Otherwise the page width changes which causes resizing so it's better show scroll right away.
+  overflow-y: scroll;
+}
+
+a {
+  &:link {
+    color: @linkColor;
+  }
+  &:visited {
+    color: @linkColor;
+  }
+  &:hover {
+    color: @linkHover;
+  }
+  &:active {
+    color: @linkHover;
+  }
 }
 
 .content-wrapper {
@@ -28,9 +48,10 @@ body {
 }
 
 .content {
-  position:relative;
+  // Without position: relative the arrow for each item doesn't properly position
+  position: relative;
 }
-
+// Negative margin to place the arrow closer to other elements.
 @arrowMargin: -9px;
 @galleryItemsPerRow: 3;
 @galleryMargin: 5px;
@@ -56,16 +77,16 @@ body {
 
   // Source for the rectangular calculations: https://stackoverflow.com/questions/5445491/height-equal-to-dynamic-width-css-fluid-layout
   .item {
-    display:inline-block;
+    display: inline-block;
     margin-right: @galleryMargin;
     margin-bottom: @galleryMargin;
     width: @galleryItemWidthCalculated;
-    position:relative;
+    position: relative;
 
     &::before {
-      content:"";
-      display:block;
-      margin-top:100%;
+      content: "";
+      display: block;
+      margin-top: 100%;
     }
 
     .img-wrapper {
@@ -87,7 +108,7 @@ body {
 .item-content {
   .video-embed-wrapper {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 */
+    padding-bottom: 56.25%; // 16:9 aspect ratio
     padding-top: 25px;
     height: 0;
 
@@ -109,17 +130,16 @@ body {
 // Content popout css
 .detail-container {
   width: 100%;
-  //margin-top: -@contentPadding;
   overflow: hidden;
   .heightTransition();
   font-size: @fontSize;
 
   .detail-content {
-    padding: @contentPadding 0;
+    padding: @contentPadding;
+    background-color: @lighterBgColor;
   }
 
   .arrow-container {
-    //border-bottom: @color solid 1px;
     hr {
       border: @color solid 2px;
       margin: @arrowMargin 0 0 0;
@@ -135,6 +155,10 @@ body {
 
   .loading {
 
+    padding: 0 @contentPadding;
+    background-color: @lighterBgColor;
+    text-align: center;
+
     height: @loadingFullSize;
     img {
       animation-name: spin;
@@ -142,7 +166,7 @@ body {
       animation-iteration-count: infinite;
       animation-timing-function: linear;
 
-      width:128px;
+      width: 128px;
       height: 128px;
       margin-top: (@loadingFullSize - @loadingSize) * 0.5;
 
@@ -161,5 +185,5 @@ body {
   Utility classes
 ****/
 .hide {
-  display:none !important;
+  display: none !important;
 }

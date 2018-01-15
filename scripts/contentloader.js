@@ -37,6 +37,10 @@ class ContentLoader {
             }
         });
     }
+    /**
+     * Init each .item element and create the contentItem
+     * @param {HTMLDivElement} a_itemElement
+     */
     initItemElement(a_itemElement) {
         const itemIndex = this.m_items.length;
         const rowIndex = ~~(itemIndex / ContentLoader.ItemsPerRow);
@@ -159,13 +163,27 @@ class ContentLoader {
             this.setContentHeight();
         }
     }
+    /**
+     * Show the loading gif and update the content height
+     */
     showLoading() {
         this.m_detailLoadingElement.classList.remove("hide");
         this.setContentHeight();
     }
+    /**
+     * Get the first content item for a row number.
+     * Which is row * items per row!
+     * @param {number} a_row
+     * @return {ContentItem}
+     */
     getFirstItemForRow(a_row) {
         return this.m_items[a_row * ContentLoader.ItemsPerRow] || null;
     }
+    /**
+     * When the .item element is clicked by a user
+     * @param {ContentItem} a_contentItem
+     * @return {Promise<void>}
+     */
     onItemClicked(a_contentItem) {
         return __awaiter(this, void 0, void 0, function* () {
             const oldItem = this.m_selectedItem;
@@ -183,6 +201,7 @@ class ContentLoader {
                         this.addDummyElement();
                         // While the detailRoot is gone from the DOM set height to 0 to not trigger animation
                         this.m_detailRoot.style.height = "0";
+                        this.positionArrow();
                         // This adds the detailRoot back to the DOM
                         this.addDetailElement();
                     }
@@ -196,7 +215,7 @@ class ContentLoader {
                     this.showLoading();
                 }
                 try {
-                    const content = yield this.fetchContent(url);
+                    const content = yield this.fetchContent(url, a_contentItem);
                     // Show the item
                     this.showContent(a_contentItem, content);
                 }
@@ -210,7 +229,13 @@ class ContentLoader {
             }
         });
     }
-    fetchContent(a_url) {
+    /**
+     * Fetch and parse the HTML from a url for a content item.
+     * @param {string} a_url
+     * @param {ContentItem} a_contentItem
+     * @return {Promise<string>}
+     */
+    fetchContent(a_url, a_contentItem) {
         if (this.m_fetchedContents[a_url]) {
             return this.m_fetchedContents[a_url];
         }
@@ -229,7 +254,12 @@ class ContentLoader {
                 res(htmlText);
             };
             xhr.onerror = (event) => {
-                console.log("error", event);
+                const itemUrl = a_contentItem.url;
+                const errorHtml = "<p>Something went wrong loading the portfolio item. \
+                                        <br> \
+                                        Link to the portfolio item: <a href='" + itemUrl + "'>" + itemUrl + "</a> \
+                                    </p>";
+                res(errorHtml);
             };
             xhr.responseType = 'document';
             xhr.open("GET", a_url, true);
@@ -241,8 +271,9 @@ class ContentLoader {
     }
 }
 ContentLoader.ItemsPerRow = 3;
-ContentLoader.MarginBottomPerItem = -1;
 ContentLoader.HeightTransitionLength = 250;
+// Set in constructor by getting computedStyle for the first content item
+ContentLoader.MarginBottomPerItem = -1;
 document.addEventListener("DOMContentLoaded", () => {
     let contentLoader = new ContentLoader("index_items", "detail_container");
 });

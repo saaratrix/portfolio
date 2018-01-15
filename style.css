@@ -6,6 +6,18 @@ body {
   background-color: #222222;
   overflow-y: scroll;
 }
+a:link {
+  color: #d06;
+}
+a:visited {
+  color: #d06;
+}
+a:hover {
+  color: #ca7;
+}
+a:active {
+  color: #ca7;
+}
 .content-wrapper {
   width: 100%;
   max-width: 1080px;
@@ -52,7 +64,6 @@ body {
 .item-content .video-embed-wrapper {
   position: relative;
   padding-bottom: 56.25%;
-  /* 16:9 */
   padding-top: 25px;
   height: 0;
 }
@@ -74,7 +85,8 @@ body {
   font-size: 1rem;
 }
 .detail-container .detail-content {
-  padding: 15px 0;
+  padding: 15px;
+  background-color: #333333;
 }
 .detail-container .arrow-container hr {
   border: silver solid 2px;
@@ -88,6 +100,9 @@ body {
   margin-top: -9px;
 }
 .detail-container .loading {
+  padding: 0 15px;
+  background-color: #333333;
+  text-align: center;
   height: 181.12px;
 }
 .detail-container .loading img {
