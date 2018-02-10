@@ -1,11 +1,9 @@
-* {
-  box-sizing: border-box;
-}
-
 @color: silver;
 @bgColor: #222222;
 @lighterBgColor: #333333;
-@fontSize: 1rem;
+@fontSizeh3: 1.25rem;
+@fontSize: 1.125rem;
+@fontFamilies: Verdana, Geneva, sans-serif;
 // The maximum width!
 @contentWidth: 1080px;
 @contentPadding: 15px;
@@ -18,11 +16,28 @@
   transition: height @transitionAnimation;
 }
 
+// Gallery variables
+// Negative margin to place the arrow closer to other elements.
+@arrowMargin: -9px;
+@galleryItemsPerRow: 3;
+@galleryMargin: 5px;
+@galleryItemWidth: (100/@galleryItemsPerRow);
+@galleryItemWidthCalculated: calc(~"@{galleryItemWidth}% - @{galleryMargin}");
+@loadingSize: 128px;
+// Since it's rotating and the loading gif is a square it's sqrt( 2 )
+@loadingFullSize: @loadingSize * 1.415; // Bit above sqrt ( 2 ) 1.41421356237...
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   color: @color;
   background-color: @bgColor;
   // Otherwise the page width changes which causes resizing so it's better show scroll right away.
   overflow-y: scroll;
+  margin: 0;
+  font-family: @fontFamilies;
 }
 
 a {
@@ -40,6 +55,11 @@ a {
   }
 }
 
+.top-bar {
+  height: 4px;
+  background-color: @linkColor;
+}
+
 .content-wrapper {
   width: 100%;
   max-width: @contentWidth;
@@ -50,16 +70,8 @@ a {
 .content {
   // Without position: relative the arrow for each item doesn't properly position
   position: relative;
+  font-size: @fontSize;
 }
-// Negative margin to place the arrow closer to other elements.
-@arrowMargin: -9px;
-@galleryItemsPerRow: 3;
-@galleryMargin: 5px;
-@galleryItemWidth: (100/@galleryItemsPerRow);
-@galleryItemWidthCalculated: calc(~"@{galleryItemWidth}% - @{galleryMargin}");
-@loadingSize: 128px;
-// Since it's rotating and the loading gif is a square it's sqrt( 2 )
-@loadingFullSize: @loadingSize * 1.415; // Bit above sqrt ( 2 ) 1.41421356237...
 
 #index_items {
   .img-wrapper {
@@ -106,6 +118,12 @@ a {
 }
 
 .item-content {
+  h3 {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    font-size: 1.5rem;
+    margin:0;
+  }
+
   .video-embed-wrapper {
     position: relative;
     padding-bottom: 56.25%; // 16:9 aspect ratio
@@ -130,13 +148,23 @@ a {
 // Content popout css
 .detail-container {
   width: 100%;
+  // Overflow hidden because otherwise arrow would be visible when height = 0
   overflow: hidden;
   .heightTransition();
   font-size: @fontSize;
+  // Add some distance to the bottom images
+  margin-bottom: @galleryMargin;
+
 
   .detail-content {
     padding: @contentPadding;
     background-color: @lighterBgColor;
+
+    // Add matching border at the bottom to the <hr> for arrow pointer
+    border-bottom: 4px solid @color;
+    // And for the sides!
+    border-left: 4px solid @color;
+    border-right: 4px solid @color;
   }
 
   .arrow-container {
@@ -149,7 +177,7 @@ a {
     display: inline-block;
     position: relative;
     font-size: 2em;
-    transition: left @transitionAnimation;
+    transition: transform @transitionAnimation;
     margin-top: @arrowMargin;
   }
 

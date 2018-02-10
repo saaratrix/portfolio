@@ -28,6 +28,7 @@ class ContentLoader {
         }
         ContentLoader.MarginBottomPerItem = parseInt(getComputedStyle(this.m_items[0].element).marginBottom, 10);
         this.m_detailRoot.parentElement.removeChild(this.m_detailRoot);
+        this.randomTopBarColor();
         // Since the height is manually calculated we need to recalculate it on a resize event
         window.addEventListener("resize", () => {
             if (this.m_selectedItem) {
@@ -67,13 +68,24 @@ class ContentLoader {
         });
     }
     /**
+     * Randomises the color for the 4px bar at the very top of the page!
+     */
+    randomTopBarColor() {
+        let topbarElement = document.querySelector(".top-bar");
+        const colors = ["#badbad", "#d06", "#ca7", "#9766AA"];
+        const index = Math.floor(Math.random() * Math.floor(colors.length));
+        const selectedColor = colors[index];
+        topbarElement.style.backgroundColor = selectedColor;
+    }
+    /**
      * Position the ^ arrow in the center of the currently selected item
      */
     positionArrow() {
         let element = this.m_selectedItem.element;
         // Position the arrow
         const centerX = element.offsetLeft + ((element.clientWidth) * 0.5);
-        this.m_detailArrow.style.left = (centerX - (this.m_detailArrow.clientWidth * 0.5)) + "px";
+        const x = (centerX - (this.m_detailArrow.clientWidth * 0.5));
+        this.m_detailArrow.style.transform = "translate3d(" + x + "px, 0, 0)";
     }
     /**
      * Add the .detail-container element to the correct row
@@ -147,6 +159,8 @@ class ContentLoader {
         const calculatedStyle = getComputedStyle(a_element);
         height += parseInt(calculatedStyle.marginTop, 10);
         height += parseInt(calculatedStyle.marginBottom, 10);
+        height += parseInt(calculatedStyle.borderTopWidth, 10);
+        height += parseInt(calculatedStyle.borderBottomWidth, 10);
         return height;
     }
     /**

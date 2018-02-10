@@ -11,7 +11,6 @@ class ContentLoader
     // Set in constructor by getting computedStyle for the first content item
     public static MarginBottomPerItem: number = -1;
 
-
     private m_listRoot: HTMLDivElement = null;
     private m_items: ContentItem[] = [];
 
@@ -25,7 +24,7 @@ class ContentLoader
     private m_detailLoadingElement: HTMLDivElement = null;
     private m_detailContent: HTMLDivElement = null;
 
-    constructor(a_itemsId: string, a_contentDetailId: string) {
+    constructor (a_itemsId: string, a_contentDetailId: string) {
         this.m_detailRoot = document.getElementById(a_contentDetailId) as HTMLDivElement;
         this.m_detailArrow = this.m_detailRoot.querySelector(".arrow");
         this.m_detailLoadingElement = this.m_detailRoot.querySelector(".loading");
@@ -42,6 +41,8 @@ class ContentLoader
 
         this.m_detailRoot.parentElement.removeChild(this.m_detailRoot);
 
+        this.randomTopBarColor();
+
         // Since the height is manually calculated we need to recalculate it on a resize event
         window.addEventListener("resize", () => {
             if (this.m_selectedItem) {
@@ -56,7 +57,7 @@ class ContentLoader
      * Init each .item element and create the contentItem
      * @param {HTMLDivElement} a_itemElement
      */
-    private initItemElement(a_itemElement: HTMLDivElement) {
+    private initItemElement (a_itemElement: HTMLDivElement) {
         const itemIndex: number = this.m_items.length;
         const rowIndex = ~~(itemIndex / ContentLoader.ItemsPerRow);
 
@@ -86,6 +87,19 @@ class ContentLoader
     }
 
     /**
+     * Randomises the color for the 4px bar at the very top of the page!
+     */
+    private randomTopBarColor () {
+        let topbarElement: HTMLElement = document.querySelector(".top-bar");
+
+        const colors: string[] = [ "#badbad", "#d06", "#ca7", "#9766AA" ];
+        const index: number = Math.floor(Math.random() * Math.floor(colors.length));
+        const selectedColor: string = colors[index];
+
+        topbarElement.style.backgroundColor = selectedColor;
+    }
+
+    /**
      * Position the ^ arrow in the center of the currently selected item
      */
     private positionArrow () {
@@ -93,7 +107,8 @@ class ContentLoader
 
         // Position the arrow
         const centerX = element.offsetLeft + (( element.clientWidth ) * 0.5);
-        this.m_detailArrow.style.left = (centerX - (this.m_detailArrow.clientWidth * 0.5)) + "px";
+        const x = (centerX - (this.m_detailArrow.clientWidth * 0.5));
+        this.m_detailArrow.style.transform = "translate3d(" + x + "px, 0, 0)";
     }
 
     /**
@@ -181,6 +196,8 @@ class ContentLoader
 
         height += parseInt(calculatedStyle.marginTop, 10);
         height += parseInt(calculatedStyle.marginBottom, 10);
+        height += parseInt(calculatedStyle.borderTopWidth, 10);
+        height += parseInt(calculatedStyle.borderBottomWidth, 10);
 
         return height;
     }
@@ -205,7 +222,7 @@ class ContentLoader
     /**
      * Show the loading gif and update the content height
      */
-    private showLoading() {
+    private showLoading () {
         this.m_detailLoadingElement.classList.remove("hide");
         this.setContentHeight();
     }
@@ -280,7 +297,7 @@ class ContentLoader
      * @param {ContentItem} a_contentItem
      * @return {Promise<string>}
      */
-    private fetchContent(a_url: string, a_contentItem: ContentItem): Promise<string> {
+    private fetchContent (a_url: string, a_contentItem: ContentItem): Promise<string> {
         if (this.m_fetchedContents[a_url]) {
             return this.m_fetchedContents[a_url];
         }

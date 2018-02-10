@@ -5,6 +5,8 @@ body {
   color: silver;
   background-color: #222222;
   overflow-y: scroll;
+  margin: 0;
+  font-family: Verdana, Geneva, sans-serif;
 }
 a:link {
   color: #d06;
@@ -18,6 +20,10 @@ a:hover {
 a:active {
   color: #ca7;
 }
+.top-bar {
+  height: 4px;
+  background-color: #d06;
+}
 .content-wrapper {
   width: 100%;
   max-width: 1080px;
@@ -26,6 +32,7 @@ a:active {
 }
 .content {
   position: relative;
+  font-size: 1.125rem;
 }
 #index_items .img-wrapper {
   cursor: pointer;
@@ -61,6 +68,11 @@ a:active {
   height: 100%;
   object-fit: cover;
 }
+.item-content h3 {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  font-size: 1.5rem;
+  margin: 0;
+}
 .item-content .video-embed-wrapper {
   position: relative;
   padding-bottom: 56.25%;
@@ -82,11 +94,15 @@ a:active {
   width: 100%;
   overflow: hidden;
   transition: height 0.2s ease;
-  font-size: 1rem;
+  font-size: 1.125rem;
+  margin-bottom: 5px;
 }
 .detail-container .detail-content {
   padding: 15px;
   background-color: #333333;
+  border-bottom: 4px solid silver;
+  border-left: 4px solid silver;
+  border-right: 4px solid silver;
 }
 .detail-container .arrow-container hr {
   border: silver solid 2px;
@@ -96,7 +112,7 @@ a:active {
   display: inline-block;
   position: relative;
   font-size: 2em;
-  transition: left 0.2s ease;
+  transition: transform 0.2s ease;
   margin-top: -9px;
 }
 .detail-container .loading {
