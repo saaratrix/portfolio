@@ -144,3 +144,6 @@ a:active {
 .hide {
   display: none !important;
 }
+.max-width-100 {
+  max-width: 100%;
+}

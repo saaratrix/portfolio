@@ -95,6 +95,7 @@ class ContentLoader {
         if (nextRowItem) {
             this.m_listRoot.insertBefore(this.m_detailRoot, nextRowItem.element);
         }
+        // If nextRowItem is null then we just append it to the root element
         else {
             this.m_listRoot.appendChild(this.m_detailRoot);
         }
