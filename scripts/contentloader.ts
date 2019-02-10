@@ -213,11 +213,30 @@ class ContentLoader
         if (a_contentItem && this.m_selectedItem === a_contentItem) {
             this.m_detailContent.innerHTML = a_content;
 
+            let iframes: NodeList = this.m_detailContent.querySelectorAll("iframe");
+            iframes.forEach((node: HTMLIFrameElement) => {
+                let iframeDoc = node.contentDocument || node.contentWindow.document;
+                // Only add onload for an unfinished iframe.
+                if (iframeDoc.readyState === "complete") {
+                    return;
+                }
+
+                let onload = () => {
+                    console.log("loaded iframe late");
+                    this.setContentHeight();
+                    node.removeEventListener("load", onload);
+                };
+
+                node.addEventListener("load", onload);
+            });
+
             this.m_detailLoadingElement.classList.add("hide");
 
             this.setContentHeight();
         }
     }
+
+
 
     /**
      * Show the loading gif and update the content height

@@ -1,0 +1,8 @@
+* smart scrolling
+	If the opened item isn't in view then scroll the page so it is in view
+* Update content for each website
+	* Add video text if javascript isn't enabled to show theres a video to show?
+		I have this issue with umatrix & youtube frame ^.^
+
+* Don't cache content if error
+	^.^

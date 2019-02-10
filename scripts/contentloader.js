@@ -176,6 +176,13 @@ class ContentLoader {
             this.m_detailContent.innerHTML = a_content;
             this.m_detailLoadingElement.classList.add("hide");
             this.setContentHeight();
+
+            let iframes = this.m_detailContent.querySelectorAll("iframe");
+            if (iframes.length > 0) {
+                setTimeout(() => {
+                    this.setContentHeight();
+                }, 100);
+            }
         }
     }
     /**
