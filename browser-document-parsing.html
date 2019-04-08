@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Document parsing in the browser for docx, odt, pdf, pptx, txt, xlsx" >
+    <title>Parsing documents</title>
+
+    <link href="style.css" rel="stylesheet" >
+</head>
+<body>
+    <div class="top-bar"></div>
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="item-content">
+                <h3>Document parsing in browser</h3>
+                <p>
+                    I worked on a feature for a larger web application which can parse the following document types directly in the browser:
+                    <br>
+                    <strong>pdf</strong>,
+                    <strong>odt</strong>,
+                    <strong>docx</strong>,
+                    <strong>pptx</strong>,
+                    <strong>xlsx</strong>,
+                    <strong>txt</strong>.
+                    <br>
+                    The words in the documents were converted into CRC32 values so they could be checked against each others.
+                    The image below shows a testing interface to check the output used on a lorem ipsum file.
+                </p>
+                <p class="back-index-button">
+                    <a href="./">Go back to start</a>
+                </p>
+                <!-- If using images -->
+                <div class="image-gallery">
+                    <ul class="list">
+                        <li>
+                            <div class="img-wrapper">
+                                <a href="#">
+                                    <img src="files/browser-document-parser/testingoutput.png" alt="Testing output for parser.">
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
