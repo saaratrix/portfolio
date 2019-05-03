@@ -222,7 +222,6 @@ class ContentLoader
                 }
 
                 let onload = () => {
-                    console.log("loaded iframe late");
                     this.setContentHeight();
                     node.removeEventListener("load", onload);
                 };

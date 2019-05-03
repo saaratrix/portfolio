@@ -174,15 +174,21 @@ class ContentLoader {
         // Do this check to make sure contentItem == current content item
         if (a_contentItem && this.m_selectedItem === a_contentItem) {
             this.m_detailContent.innerHTML = a_content;
+            let iframes = this.m_detailContent.querySelectorAll("iframe");
+            iframes.forEach((node) => {
+                let iframeDoc = node.contentDocument || node.contentWindow.document;
+                // Only add onload for an unfinished iframe.
+                if (iframeDoc.readyState === "complete") {
+                    return;
+                }
+                let onload = () => {
+                    this.setContentHeight();
+                    node.removeEventListener("load", onload);
+                };
+                node.addEventListener("load", onload);
+            });
             this.m_detailLoadingElement.classList.add("hide");
             this.setContentHeight();
-
-            let iframes = this.m_detailContent.querySelectorAll("iframe");
-            if (iframes.length > 0) {
-                setTimeout(() => {
-                    this.setContentHeight();
-                }, 100);
-            }
         }
     }
     /**
