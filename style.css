@@ -155,31 +155,30 @@ a:active {
 .detail-container {
   width: 100%;
   overflow: hidden;
-  transition: height 0.2s ease;
   font-size: 1.125rem;
   margin-bottom: 5px;
+  transition: height 0.2s ease;
 }
-.detail-container .detail-content {
-  padding: 15px;
-  background-color: #333333;
-  border-bottom: 4px solid silver;
-  border-left: 4px solid silver;
-  border-right: 4px solid silver;
+.detail-container .detail-inner-wrapper {
+  padding: 60px;
+  transition: clip-path 0.2s ease;
+  --aug-border-bg: linear-gradient(to bottom right, #9766AA, #ca7);
+  --aug-inlay-bg: linear-gradient(to bottom right, #ca7, #9766AA);
+  --aug-inlay-all: 5px;
+  --aug-inlay-opacity: 0.15;
+  --aug-tl: 20px;
+  --aug-tr: 20px;
+  --aug-t: 10px;
+  --aug-bl: 20px;
+  --aug-br: 20px;
+  --aug-t-center: 16.65%;
 }
-.detail-container .arrow-container hr {
-  border: silver solid 2px;
-  margin: -9px 0 0 0;
-}
-.detail-container .arrow {
-  display: inline-block;
-  position: relative;
-  font-size: 2em;
-  transition: transform 0.2s ease;
-  margin-top: -9px;
+.detail-container .detail-inner-wrapper:before,
+.detail-container .detail-inner-wrapper:after {
+  transition: clip-path 0.2s ease;
 }
 .detail-container .loading {
   padding: 0 15px;
-  background-color: #333333;
   text-align: center;
   height: 181.12px;
 }

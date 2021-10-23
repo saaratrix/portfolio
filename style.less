@@ -17,9 +17,6 @@
 @imageComparisonHandleLineHeight: (@imageComparisonHandleSizeHalf - @imageComparisonHandleBorderSize);
 
 @transitionAnimation: 0.2s ease;
-.heightTransition() {
-  transition: height @transitionAnimation;
-}
 
 // Gallery variables
 // Negative margin to place the arrow closer to other elements.
@@ -221,7 +218,7 @@ a {
 
 .dummy-detail {
   width: 100%;
-  .heightTransition();
+  transition: height @transitionAnimation;
 }
 
 // Content popout css
@@ -229,41 +226,34 @@ a {
   width: 100%;
   // Overflow hidden because otherwise arrow would be visible when height = 0
   overflow: hidden;
-  .heightTransition();
   font-size: @fontSize;
   // Add some distance to the bottom images
   margin-bottom: @galleryMargin;
+  transition: height @transitionAnimation;
 
+  .detail-inner-wrapper {
+    padding: 60px;
 
-  .detail-content {
-    padding: @contentPadding;
-    background-color: @lighterBgColor;
-
-    // Add matching border at the bottom to the <hr> for arrow pointer
-    border-bottom: 4px solid @borderColor;
-    // And for the sides!
-    border-left: 4px solid @borderColor;
-    border-right: 4px solid @borderColor;
-  }
-
-  .arrow-container {
-    hr {
-      border: @borderColor solid 2px;
-      margin: @arrowMargin 0 0 0;
+    transition: clip-path @transitionAnimation;
+    &:before, &:after {
+      transition: clip-path @transitionAnimation;
     }
-  }
-  .arrow {
-    display: inline-block;
-    position: relative;
-    font-size: 2em;
-    transition: transform @transitionAnimation;
-    margin-top: @arrowMargin;
+
+    --aug-border-bg: linear-gradient(to bottom right, #9766AA, #ca7);
+    --aug-inlay-bg: linear-gradient(to bottom right, #ca7, #9766AA);
+    --aug-inlay-all: 5px;
+    --aug-inlay-opacity: 0.15;
+    --aug-tl: 20px;
+    --aug-tr: 20px;
+    --aug-t: 10px;
+    --aug-bl: 20px;
+    --aug-br: 20px;
+    --aug-t-center: 16.65%;
   }
 
   .loading {
 
     padding: 0 @contentPadding;
-    background-color: @lighterBgColor;
     text-align: center;
 
     height: @loadingFullSize;

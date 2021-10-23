@@ -23,17 +23,17 @@ class ContentLoader
 
     // Content-detail elements
     private detailRoot: HTMLDivElement = null;
-    private detailArrow: HTMLDivElement = null;
+    private detailInnerWrapper: HTMLDivElement | null = null;
     private detailLoadingElement: HTMLDivElement = null;
     private detailContent: HTMLDivElement = null;
 
-    constructor (a_itemsId: string, a_contentDetailId: string) {
-        this.detailRoot = document.getElementById(a_contentDetailId) as HTMLDivElement;
-        this.detailArrow = this.detailRoot.querySelector(".arrow");
+    constructor (itemsId: string, contentDetailId: string) {
+        this.detailRoot = document.getElementById(contentDetailId) as HTMLDivElement;
+        this.detailInnerWrapper = this.detailRoot.querySelector<HTMLDivElement>('.detail-inner-wrapper');
         this.detailLoadingElement = this.detailRoot.querySelector(".loading");
         this.detailContent = this.detailRoot.querySelector(".detail-content");
 
-        this.listRoot = document.getElementById(a_itemsId) as HTMLDivElement;
+        this.listRoot = document.getElementById(itemsId) as HTMLDivElement;
 
         var liElements: NodeList = this.listRoot.querySelectorAll(".item");
         for (let i = 0; i < liElements.length; ++i) {
@@ -58,21 +58,21 @@ class ContentLoader
 
     /**
      * Init each .item element and create the contentItem
-     * @param {HTMLDivElement} a_itemElement
+     * @param {HTMLDivElement} itemElement
      */
-    private initItemElement (a_itemElement: HTMLDivElement) {
+    private initItemElement (itemElement: HTMLDivElement) {
         const itemIndex: number = this.items.length;
         const rowIndex = ~~(itemIndex / ContentLoader.ItemsPerRow);
 
         let item : ContentItem = {
-            element: a_itemElement,
+            element: itemElement,
             url: "",
             row: rowIndex
         };
         this.items.push(item);
 
         // 1. Remove project-links so the the onclick doesnt take them to the other projects
-        let projectLinks = a_itemElement.querySelectorAll(".project-link");
+        let projectLinks = itemElement.querySelectorAll(".project-link");
         for (let i = 0; i < projectLinks.length; ++i) {
             let projectLinkElement = projectLinks.item(i) as HTMLAnchorElement;
             if (projectLinkElement.querySelector("img") !== null) {
@@ -84,7 +84,7 @@ class ContentLoader
             }
         }
 
-        a_itemElement.addEventListener("click", () => {
+        itemElement.addEventListener("click", () => {
             this.onItemClicked(item);
         });
     }
@@ -110,8 +110,7 @@ class ContentLoader
 
         // Position the arrow
         const centerX = element.offsetLeft + (( element.clientWidth ) * 0.5);
-        const x = (centerX - (this.detailArrow.clientWidth * 0.5));
-        this.detailArrow.style.transform = `translate3d(${x}px, 0, 0)`;
+        this.detailInnerWrapper.style.setProperty('--aug-t-center', `${centerX}px`);
     }
 
     /**
@@ -176,26 +175,18 @@ class ContentLoader
      * Manually set the height of the .detail-container to correctly trigger the css-transition animation
      */
     private setContentHeight () {
-        const arrowContainerHeight = this.getElementHeight(this.detailArrow.parentElement);
-        // loadingHeight will be 0 unless it's visible
-        const loadingHeight = this.getElementHeight(this.detailLoadingElement);
-        // If loadingHeight is 0 then set contentHeight as 0 to disregard padding
-        const contentHeight = loadingHeight <= 0 ? this.getElementHeight(this.detailContent) : 0;
-
-        const totalHeight = arrowContainerHeight + loadingHeight + contentHeight;
-
-        this.detailRoot.style.height = totalHeight + "px";
-
+        const innerHeight = this.getElementHeight(this.detailInnerWrapper);
+        this.detailRoot.style.height = innerHeight + "px";
     }
 
     /**
      * Get clientHeight + margin
-     * @param {HTMLElement} a_element
+     * @param {HTMLElement} element
      * @return {number}
      */
-    private getElementHeight (a_element: HTMLElement): number {
-        let height: number = a_element.clientHeight;
-        const calculatedStyle: CSSStyleDeclaration = getComputedStyle(a_element);
+    private getElementHeight (element: HTMLElement): number {
+        let height: number = element.clientHeight;
+        const calculatedStyle: CSSStyleDeclaration = getComputedStyle(element);
 
         height += parseInt(calculatedStyle.marginTop, 10);
         height += parseInt(calculatedStyle.marginBottom, 10);
@@ -263,26 +254,26 @@ class ContentLoader
     /**
      * Get the first content item for a row number.
      * Which is row * items per row!
-     * @param {number} a_row
+     * @param {number} row
      * @return {ContentItem}
      */
-    private getFirstItemForRow(a_row: number) : ContentItem {
-        return this.items[a_row * ContentLoader.ItemsPerRow] || null;
+    private getFirstItemForRow(row: number) : ContentItem {
+        return this.items[row * ContentLoader.ItemsPerRow] || null;
     }
 
     /**
      * When the .item element is clicked by a user
-     * @param {ContentItem} a_contentItem
+     * @param {ContentItem} contentItem
      * @return {Promise<void>}
      */
-    private async onItemClicked (a_contentItem: ContentItem) {
+    private async onItemClicked (contentItem: ContentItem) {
         const oldItem = this.selectedItem;
-        const isDifferentItem: boolean = this.selectedItem !== a_contentItem;
+        const isDifferentItem: boolean = this.selectedItem !== contentItem;
 
         // If the item was a different one then show content for that item
         if (isDifferentItem) {
-            this.selectedItem = a_contentItem;
-            const url = a_contentItem.url;
+            this.selectedItem = contentItem;
+            const url = contentItem.url;
 
             this.clearContent();
 
@@ -311,11 +302,11 @@ class ContentLoader
             }
 
             try {
-                const content = await this.fetchContent(url, a_contentItem);
+                const content = await this.fetchContent(url, contentItem);
                 // Show the item
-                this.showContent(a_contentItem, content);
+                this.showContent(contentItem, content);
             } catch (err) {
-                this.showContent(a_contentItem, 'Something went wrong loading content');
+                this.showContent(contentItem, 'Something went wrong loading content');
             }
         }
         else {
@@ -326,13 +317,13 @@ class ContentLoader
 
     /**
      * Fetch and parse the HTML from a url for a content item.
-     * @param {string} a_url
-     * @param {ContentItem} a_contentItem
+     * @param {string} url
+     * @param {ContentItem} contentItem
      * @return {Promise<string>}
      */
-    private fetchContent (a_url: string, a_contentItem: ContentItem): Promise<string> {
-        if (this.fetchedContents[a_url]) {
-            return this.fetchedContents[a_url];
+    private fetchContent (url: string, contentItem: ContentItem): Promise<string> {
+        if (this.fetchedContents[url]) {
+            return this.fetchedContents[url];
         }
 
         let promise = new Promise<string>(res => {
@@ -354,7 +345,7 @@ class ContentLoader
             };
 
             xhr.onerror = (event) => {
-                const itemUrl = a_contentItem.url;
+                const itemUrl = contentItem.url;
 
                 const errorHtml = "<p>Something went wrong loading the portfolio item. \
                                         <br> \
@@ -365,12 +356,12 @@ class ContentLoader
 
             xhr.responseType = 'document';
 
-            xhr.open("GET", a_url, true);
+            xhr.open("GET", url, true);
             xhr.setRequestHeader('Content-type', 'text/html');
             xhr.send();
         });
 
-        this.fetchedContents[a_url] = promise;
+        this.fetchedContents[url] = promise;
         return promise;
     }
 }
