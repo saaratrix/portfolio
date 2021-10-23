@@ -1,6 +1,7 @@
 @color: silver;
 @bgColor: #222222;
 @lighterBgColor: #333333;
+@borderColor: silver;
 @fontSizeh3: 1.25rem;
 @fontSize: 1.125rem;
 @fontFamilies: Verdana, Geneva, sans-serif;
@@ -10,6 +11,10 @@
 
 @linkColor: #d06; // dog!
 @linkHover: #ca7; // cat!
+@imageComparisonHandleSize: 30px;
+@imageComparisonHandleSizeHalf: (@imageComparisonHandleSize / 2);
+@imageComparisonHandleBorderSize: 2px;
+@imageComparisonHandleLineHeight: (@imageComparisonHandleSizeHalf - @imageComparisonHandleBorderSize);
 
 @transitionAnimation: 0.2s ease;
 .heightTransition() {
@@ -21,7 +26,7 @@
 @arrowMargin: -9px;
 @galleryItemsPerRow: 3;
 @galleryMargin: 5px;
-@galleryItemWidth: (100/@galleryItemsPerRow);
+@galleryItemWidth: (100 / @galleryItemsPerRow);
 @galleryItemWidthCalculated: calc(~"@{galleryItemWidth}% - @{galleryMargin}");
 @loadingSize: 128px;
 // Since it's rotating and the loading gif is a square it's sqrt( 2 )
@@ -140,6 +145,80 @@ a {
   }
 }
 
+.image-comparison-loaded {
+  display: flex;
+  position: relative;
+  user-select: none;
+  // To hide the handle overflowing out of the page.
+  overflow: hidden;
+
+  .image-comparison-before, .image-comparison-after {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    img {
+      object-fit: cover;
+      width: 100%;
+      max-height: 100%;
+    }
+  }
+
+  .image-comparison-after {
+    // So that they overlap.
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
+.image-comparison-slider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-comparison-slider-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: @imageComparisonHandleSize;
+  height: @imageComparisonHandleSize;
+  border-radius: @imageComparisonHandleSizeHalf;
+  border: @imageComparisonHandleBorderSize solid @borderColor;
+  cursor: grab;
+  font-size: 1.5em;
+  text-shadow: 1px 0 2px rgba(0, 0, 0, 0.2);
+  // To center the arrows.
+  padding-bottom: 6px;
+  margin-left: -@imageComparisonHandleSizeHalf;
+
+  &:before, &:after {
+    position: absolute;
+
+    // We can't use % here or the line will not be very tall.
+    height: 9999px;
+    width: 3px;
+    background-color: @borderColor;
+    content: " ";
+    // Add some padding so it's eaiser to grab.
+    border-left: 2px solid transparent;
+    border-right: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  &:before {
+    bottom: (@imageComparisonHandleSize - 3);
+  }
+
+  &:after {
+    top: (@imageComparisonHandleSize - 3);
+  }
+}
+
 .dummy-detail {
   width: 100%;
   .heightTransition();
@@ -161,15 +240,15 @@ a {
     background-color: @lighterBgColor;
 
     // Add matching border at the bottom to the <hr> for arrow pointer
-    border-bottom: 4px solid @color;
+    border-bottom: 4px solid @borderColor;
     // And for the sides!
-    border-left: 4px solid @color;
-    border-right: 4px solid @color;
+    border-left: 4px solid @borderColor;
+    border-right: 4px solid @borderColor;
   }
 
   .arrow-container {
     hr {
-      border: @color solid 2px;
+      border: @borderColor solid 2px;
       margin: @arrowMargin 0 0 0;
     }
   }
