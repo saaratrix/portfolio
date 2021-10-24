@@ -154,13 +154,14 @@ a {
   // To hide the handle overflowing out of the page.
   overflow: hidden;
 
-  &:hover {
-    &.is-dragging {
-      .image-comparison-description {
-        opacity: 0;
-      }
+  &.is-dragging {
+    touch-action: none;
+
+    .image-comparison-description {
+      opacity: 0;
     }
   }
+
 
   .image-comparison-before, .image-comparison-after {
     display: flex;
