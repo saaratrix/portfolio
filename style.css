@@ -96,9 +96,6 @@ a:active {
   user-select: none;
   overflow: hidden;
 }
-.image-comparison-loaded.is-dragging {
-  touch-action: none;
-}
 .image-comparison-loaded.is-dragging .image-comparison-description {
   opacity: 0;
 }
