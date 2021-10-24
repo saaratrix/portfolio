@@ -86,6 +86,9 @@ a:active {
   width: 100%;
   height: 100%;
 }
+.item-content aside {
+  font-size: 0.8em;
+}
 .image-comparison-loaded {
   display: flex;
   position: relative;
@@ -160,8 +163,8 @@ a:active {
   transition: height 0.2s ease;
 }
 .detail-container .detail-inner-wrapper {
-  padding: 60px;
-  transition: clip-path 0.2s ease;
+  padding: 80px 60px;
+  transition: height 0.2s ease, clip-path 0.2s ease;
   --aug-border-bg: linear-gradient(to bottom right, #9766AA, #ca7);
   --aug-inlay-bg: linear-gradient(to bottom right, #ca7, #9766AA);
   --aug-inlay-all: 5px;
@@ -172,6 +175,12 @@ a:active {
   --aug-bl: 20px;
   --aug-br: 20px;
   --aug-t-center: 16.65%;
+  --aug-l-extend1: 80px;
+  --aug-l-center: min(25%, 125px);
+  --aug-r-extend1: 80px;
+  --nuu-r-center: 75%;
+  --nuu-r-center-offset: 125px;
+  --aug-r-center: var(--nuu-r-center);
 }
 .detail-container .detail-inner-wrapper:before,
 .detail-container .detail-inner-wrapper:after {

@@ -27,6 +27,9 @@ class ContentLoader
     private detailLoadingElement: HTMLDivElement = null;
     private detailContent: HTMLDivElement = null;
 
+    private augRCenterPercentageMultiplier: number;
+    private augRCenterOffset: number;
+
     constructor (itemsId: string, contentDetailId: string) {
         this.detailRoot = document.getElementById(contentDetailId) as HTMLDivElement;
         this.detailInnerWrapper = this.detailRoot.querySelector<HTMLDivElement>('.detail-inner-wrapper');
@@ -41,6 +44,9 @@ class ContentLoader
         }
 
         ContentLoader.MarginBottomPerItem = parseInt(getComputedStyle(this.items[0].element).marginBottom, 10);
+        const detailInnerWrapperStyles = getComputedStyle(this.detailInnerWrapper);
+        this.augRCenterPercentageMultiplier = parseFloat(detailInnerWrapperStyles.getPropertyValue('--nuu-r-center')) / 100;
+        this.augRCenterOffset = parseFloat(detailInnerWrapperStyles.getPropertyValue('--nuu-r-center-offset'));
 
         this.detailRoot.parentElement.removeChild(this.detailRoot);
 
@@ -175,8 +181,17 @@ class ContentLoader
      * Manually set the height of the .detail-container to correctly trigger the css-transition animation
      */
     private setContentHeight () {
-        const innerHeight = this.getElementHeight(this.detailInnerWrapper);
+        // Unset the height so we can correctly calculate the height.
+        this.detailInnerWrapper.style.height = '';
+        const innerHeight = this.detailInnerWrapper.getBoundingClientRect().height; //this.getElementHeight(this.detailInnerWrapper);
+        const augRCenterPercent = innerHeight * this.augRCenterPercentageMultiplier;
+        const augRCenterMinusPixels = innerHeight - this.augRCenterOffset;
+        const augRCenterTarget = augRCenterMinusPixels < augRCenterPercent ? augRCenterPercent : augRCenterMinusPixels;
+        this.detailInnerWrapper.style.setProperty('--aug-r-center', `${augRCenterTarget}px`);
+
         this.detailRoot.style.height = innerHeight + "px";
+        this.detailInnerWrapper.style.height = `${innerHeight}px`;
+
     }
 
     /**
@@ -228,7 +243,6 @@ class ContentLoader
 
             this.detailLoadingElement.classList.add("hide");
             this.processContent(contentItem, this.detailContent);
-            this.setContentHeight();
         }
     }
 

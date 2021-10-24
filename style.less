@@ -140,6 +140,10 @@ a {
       height: 100%;
     }
   }
+
+  aside {
+    font-size: 0.8em;
+  }
 }
 
 .image-comparison-loaded {
@@ -232,9 +236,9 @@ a {
   transition: height @transitionAnimation;
 
   .detail-inner-wrapper {
-    padding: 60px;
+    padding: 80px 60px;
 
-    transition: clip-path @transitionAnimation;
+    transition: height @transitionAnimation, clip-path @transitionAnimation;
     &:before, &:after {
       transition: clip-path @transitionAnimation;
     }
@@ -249,6 +253,14 @@ a {
     --aug-bl: 20px;
     --aug-br: 20px;
     --aug-t-center: 16.65%;
+    --aug-l-extend1: 80px;
+    --aug-l-center: min(25%, 125px);
+    --aug-r-extend1: 80px;
+    // We need to properly calculate this value with javascript because we don't have the height in pixels in CSS.
+    // The nuu- variables are to get the values in javascript so we can still control it through css.
+    --nuu-r-center: 75%;
+    --nuu-r-center-offset: 125px;
+    --aug-r-center: var(--nuu-r-center);
   }
 
   .loading {
