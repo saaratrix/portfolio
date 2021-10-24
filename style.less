@@ -1,7 +1,6 @@
 @color: silver;
 @bgColor: #222222;
 @lighterBgColor: #333333;
-@borderColor: silver;
 @fontSizeh3: 1.25rem;
 @fontSize: 1.125rem;
 @fontFamilies: Verdana, Geneva, sans-serif;
@@ -11,6 +10,7 @@
 
 @linkColor: #d06; // dog!
 @linkHover: #ca7; // cat!
+@imageComparisonColor: @color;
 @imageComparisonHandleSize: 30px;
 @imageComparisonHandleSizeHalf: (@imageComparisonHandleSize / 2);
 @imageComparisonHandleBorderSize: 2px;
@@ -38,7 +38,7 @@ body {
   background-color: @bgColor;
   // Otherwise the page width changes which causes resizing so it's better show scroll right away.
   overflow-y: scroll;
-  margin: 0;
+  margin: 0 0 10px 0;
   font-family: @fontFamilies;
 }
 
@@ -60,6 +60,7 @@ a {
 .top-bar {
   height: 4px;
   background-color: @linkColor;
+  margin-bottom: 10px;
 }
 
 .content-wrapper {
@@ -153,9 +154,19 @@ a {
   // To hide the handle overflowing out of the page.
   overflow: hidden;
 
+  &:hover {
+    &.is-dragging {
+      .image-comparison-description {
+        opacity: 0;
+      }
+    }
+  }
+
   .image-comparison-before, .image-comparison-after {
     display: flex;
     flex-direction: column;
+    // Centers the description elements.
+    justify-content: center;
     width: 100%;
 
     img {
@@ -165,11 +176,29 @@ a {
     }
   }
 
+  .image-comparison-before {
+    .image-comparison-description {
+      left: 10px;
+    }
+  }
+
   .image-comparison-after {
     // So that they overlap.
     position: absolute;
     top: 0;
     left: 0;
+
+    .image-comparison-description {
+      right: 10px;
+    }
+  }
+
+  .image-comparison-description {
+    position: absolute;
+    text-shadow: 1px 1px 0px black;
+    transition: opacity @transitionAnimation;
+    // The lazy way of moving text away from the slider handle if they overlap.
+    //padding-top: 50px;
   }
 }
 
@@ -189,10 +218,11 @@ a {
   width: @imageComparisonHandleSize;
   height: @imageComparisonHandleSize;
   border-radius: @imageComparisonHandleSizeHalf;
-  border: @imageComparisonHandleBorderSize solid @borderColor;
+  border: @imageComparisonHandleBorderSize solid @imageComparisonColor;
   cursor: grab;
   font-size: 1.5em;
-  text-shadow: 1px 0 2px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  color: @imageComparisonColor;
   // To center the arrows.
   padding-bottom: 6px;
   margin-left: -@imageComparisonHandleSizeHalf;
@@ -203,7 +233,7 @@ a {
     // We can't use % here or the line will not be very tall.
     height: 9999px;
     width: 3px;
-    background-color: @borderColor;
+    background-color: @imageComparisonColor;
     content: " ";
     // Add some padding so it's eaiser to grab.
     border-left: 2px solid transparent;
@@ -254,11 +284,10 @@ a {
     --aug-br: 20px;
     --aug-t-center: 16.65%;
     --aug-l-extend1: 80px;
-    --aug-l-center: min(25%, 125px);
+    --aug-l-center: 125px;
     --aug-r-extend1: 80px;
     // We need to properly calculate this value with javascript because we don't have the height in pixels in CSS.
-    // The nuu- variables are to get the values in javascript so we can still control it through css.
-    --nuu-r-center: 75%;
+    // The nuu- variable is to get the values in javascript so we can still control it through css.
     --nuu-r-center-offset: 125px;
     --aug-r-center: var(--nuu-r-center);
   }

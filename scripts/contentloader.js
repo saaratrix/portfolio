@@ -31,7 +31,6 @@ class ContentLoader {
         }
         ContentLoader.MarginBottomPerItem = parseInt(getComputedStyle(this.items[0].element).marginBottom, 10);
         const detailInnerWrapperStyles = getComputedStyle(this.detailInnerWrapper);
-        this.augRCenterPercentageMultiplier = parseFloat(detailInnerWrapperStyles.getPropertyValue('--nuu-r-center')) / 100;
         this.augRCenterOffset = parseFloat(detailInnerWrapperStyles.getPropertyValue('--nuu-r-center-offset'));
         this.detailRoot.parentElement.removeChild(this.detailRoot);
         this.randomTopBarColor();
@@ -149,11 +148,10 @@ class ContentLoader {
     setContentHeight() {
         // Unset the height so we can correctly calculate the height.
         this.detailInnerWrapper.style.height = '';
-        const innerHeight = this.detailInnerWrapper.getBoundingClientRect().height; //this.getElementHeight(this.detailInnerWrapper);
-        const augRCenterPercent = innerHeight * this.augRCenterPercentageMultiplier;
+        const innerHeight = this.detailInnerWrapper.getBoundingClientRect().height;
         const augRCenterMinusPixels = innerHeight - this.augRCenterOffset;
-        const augRCenterTarget = augRCenterMinusPixels < augRCenterPercent ? augRCenterPercent : augRCenterMinusPixels;
-        this.detailInnerWrapper.style.setProperty('--aug-r-center', `${augRCenterTarget}px`);
+        // If the height would be really small we'd overflow out of the element but that's ok, because there are no small items.
+        this.detailInnerWrapper.style.setProperty('--aug-r-center', `${augRCenterMinusPixels}px`);
         this.detailRoot.style.height = innerHeight + "px";
         this.detailInnerWrapper.style.height = `${innerHeight}px`;
     }

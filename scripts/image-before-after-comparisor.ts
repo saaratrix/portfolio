@@ -55,10 +55,6 @@ export class ImageBeforeAfterComparisor {
         afterImage.draggable = false;
 
         comparisonElement.classList.add('image-comparison-loaded');
-        // Hide the descriptions as they aren't needed with javascript.
-        const descriptions = comparisonElement.querySelectorAll<HTMLElement>('.image-comparison-description');
-        descriptions.forEach(element => element.style.display = 'none');
-
         this.initSlider(sliderElement, sliderHandleElement, comparisonElement, beforeElement, afterElement);
 
         const promises: Promise<void>[] = [
@@ -118,6 +114,7 @@ export class ImageBeforeAfterComparisor {
             isPointerDown = true;
             const handleBounds = sliderHandleElement.getBoundingClientRect();
             pointerDownOffset = (event.clientX - handleBounds.left) - (handleBounds.width / 2);
+            comparisonElement.classList.add('is-dragging');
         });
 
         const pointerMove = (event: PointerEvent) => {
@@ -144,6 +141,7 @@ export class ImageBeforeAfterComparisor {
 
         const pointerUp = (): void => {
             isPointerDown = false;
+            comparisonElement.classList.remove('is-dragging');
         }
 
         window.addEventListener('pointermove', pointerMove);

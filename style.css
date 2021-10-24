@@ -5,7 +5,7 @@ body {
   color: silver;
   background-color: #222222;
   overflow-y: scroll;
-  margin: 0;
+  margin: 0 0 10px 0;
   font-family: Verdana, Geneva, sans-serif;
 }
 a:link {
@@ -23,6 +23,7 @@ a:active {
 .top-bar {
   height: 4px;
   background-color: #d06;
+  margin-bottom: 10px;
 }
 .content-wrapper {
   width: 100%;
@@ -95,10 +96,14 @@ a:active {
   user-select: none;
   overflow: hidden;
 }
+.image-comparison-loaded:hover.is-dragging .image-comparison-description {
+  opacity: 0;
+}
 .image-comparison-loaded .image-comparison-before,
 .image-comparison-loaded .image-comparison-after {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   width: 100%;
 }
 .image-comparison-loaded .image-comparison-before img,
@@ -107,10 +112,21 @@ a:active {
   width: 100%;
   max-height: 100%;
 }
+.image-comparison-loaded .image-comparison-before .image-comparison-description {
+  left: 10px;
+}
 .image-comparison-loaded .image-comparison-after {
   position: absolute;
   top: 0;
   left: 0;
+}
+.image-comparison-loaded .image-comparison-after .image-comparison-description {
+  right: 10px;
+}
+.image-comparison-loaded .image-comparison-description {
+  position: absolute;
+  text-shadow: 1px 1px 0px black;
+  transition: opacity 0.2s ease;
 }
 .image-comparison-slider {
   position: absolute;
@@ -130,7 +146,8 @@ a:active {
   border: 2px solid silver;
   cursor: grab;
   font-size: 1.5em;
-  text-shadow: 1px 0 2px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  color: silver;
   padding-bottom: 6px;
   margin-left: -15px;
 }
@@ -176,9 +193,8 @@ a:active {
   --aug-br: 20px;
   --aug-t-center: 16.65%;
   --aug-l-extend1: 80px;
-  --aug-l-center: min(25%, 125px);
+  --aug-l-center: 125px;
   --aug-r-extend1: 80px;
-  --nuu-r-center: 75%;
   --nuu-r-center-offset: 125px;
   --aug-r-center: var(--nuu-r-center);
 }
