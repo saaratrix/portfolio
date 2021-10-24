@@ -95,6 +95,7 @@ a:active {
   position: relative;
   user-select: none;
   overflow: hidden;
+  touch-action: none;
 }
 .image-comparison-loaded.is-dragging .image-comparison-description {
   opacity: 0;
