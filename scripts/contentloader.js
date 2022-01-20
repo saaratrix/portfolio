@@ -179,26 +179,51 @@ class ContentLoader {
         // Do this check to make sure contentItem == current content item
         if (contentItem && this.selectedItem === contentItem) {
             this.detailContent.innerHTML = content;
-            let iframes = this.detailContent.querySelectorAll("iframe");
-            iframes.forEach((node) => {
-                let iframeDoc = node.contentDocument || node.contentWindow.document;
-                // Only add onload for an unfinished iframe.
-                if (iframeDoc.readyState === "complete") {
-                    return;
-                }
-                let onload = () => {
-                    if (contentItem !== this.selectedItem) {
-                        return;
-                    }
-                    this.setContentHeight();
-                };
-                node.addEventListener("load", onload, { once: true });
-            });
+            this.processIframes(contentItem);
+            this.processImages(contentItem);
             this.detailLoadingElement.classList.add("hide");
-            this.processContent(contentItem, this.detailContent);
+            this.processImageComparison(contentItem, this.detailContent);
         }
     }
-    processContent(contentItem, rootElement) {
+    processIframes(contentItem) {
+        let iframes = this.detailContent.querySelectorAll("iframe");
+        iframes.forEach((node) => {
+            let iframeDoc = node.contentDocument || node.contentWindow.document;
+            // Only add onload for an unfinished iframe.
+            if (iframeDoc.readyState === "complete") {
+                return;
+            }
+            let onload = () => {
+                if (contentItem !== this.selectedItem) {
+                    return;
+                }
+                this.setContentHeight();
+            };
+            node.addEventListener("load", onload, { once: true });
+        });
+    }
+    processImages(contentItem) {
+        const images = this.detailContent.querySelectorAll('img');
+        images.forEach(image => {
+            if (image.complete && image.naturalHeight !== 0) {
+                this.setContentHeight();
+                return;
+            }
+            image.addEventListener('load', () => {
+                if (this.selectedItem !== contentItem) {
+                    return;
+                }
+                this.setContentHeight();
+            });
+            image.addEventListener('error', () => {
+                if (this.selectedItem !== contentItem) {
+                    return;
+                }
+                this.setContentHeight();
+            });
+        });
+    }
+    processImageComparison(contentItem, rootElement) {
         this.imageComparisor.clearEvents();
         this.imageComparisor.tryAddImageComparison(rootElement).then(() => {
             if (contentItem !== this.selectedItem) {

@@ -219,31 +219,61 @@ class ContentLoader
         if (contentItem && this.selectedItem === contentItem) {
             this.detailContent.innerHTML = content;
 
-            let iframes: NodeList = this.detailContent.querySelectorAll("iframe");
-            iframes.forEach((node: HTMLIFrameElement) => {
-                let iframeDoc = node.contentDocument || node.contentWindow.document;
-                // Only add onload for an unfinished iframe.
-                if (iframeDoc.readyState === "complete") {
-                    return;
-                }
-
-                let onload = () => {
-                    if (contentItem !== this.selectedItem) {
-                        return;
-                    }
-
-                    this.setContentHeight();
-                };
-
-                node.addEventListener("load", onload, { once: true });
-            });
+            this.processIframes(contentItem);
+            this.processImages(contentItem);
 
             this.detailLoadingElement.classList.add("hide");
-            this.processContent(contentItem, this.detailContent);
+            this.processImageComparison(contentItem, this.detailContent);
         }
     }
 
-    private processContent(contentItem: ContentItem, rootElement: HTMLElement): void {
+    private processIframes(contentItem: ContentItem): void {
+        let iframes: NodeList = this.detailContent.querySelectorAll("iframe");
+        iframes.forEach((node: HTMLIFrameElement) => {
+            let iframeDoc = node.contentDocument || node.contentWindow.document;
+            // Only add onload for an unfinished iframe.
+            if (iframeDoc.readyState === "complete") {
+                return;
+            }
+
+            let onload = () => {
+                if (contentItem !== this.selectedItem) {
+                    return;
+                }
+
+                this.setContentHeight();
+            };
+
+            node.addEventListener("load", onload, { once: true });
+        });
+    }
+
+    private processImages(contentItem: ContentItem): void {
+        const images = this.detailContent.querySelectorAll('img');
+        images.forEach(image => {
+           if (image.complete && image.naturalHeight !== 0) {
+               this.setContentHeight();
+               return;
+           }
+
+            image.addEventListener('load', () => {
+                if (this.selectedItem !== contentItem) {
+                    return;
+                }
+
+                this.setContentHeight();
+            });
+            image.addEventListener('error', () => {
+                if (this.selectedItem !== contentItem) {
+                    return;
+                }
+
+                this.setContentHeight();
+            });
+        });
+    }
+
+    private processImageComparison(contentItem: ContentItem, rootElement: HTMLElement): void {
         this.imageComparisor.clearEvents();
         this.imageComparisor.tryAddImageComparison(rootElement).then(() => {
             if (contentItem !== this.selectedItem) {
